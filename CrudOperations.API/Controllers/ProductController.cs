@@ -10,13 +10,13 @@ namespace CrudOperations.API.Controllers
     {
         #region Fields
 
-        private readonly ProductRepository _productRepo;
+        private readonly IRepository<Product> _productRepo;
 
         #endregion
 
         #region Constructors
 
-        public ProductController(ProductRepository productRepo)
+        public ProductController(IRepository<Product> productRepo)
         {
             _productRepo = productRepo;
         }
