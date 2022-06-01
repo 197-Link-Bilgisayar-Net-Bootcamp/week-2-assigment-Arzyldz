@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudOperations.API.Repository
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private readonly MyDataContext _dbContext;
         protected readonly DbSet<TEntity> _dbSet;
@@ -12,11 +12,12 @@ namespace CrudOperations.API.Repository
             _dbContext = dbContext;
             _dbSet = dbContext.Set<TEntity>();
         }
+       
         public async Task Add(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
             //_dbContext.Entry(entity).State = EntityState.Added;
-            await _dbContext.SaveChangesAsync();
+            await SaveChangesAsync();
         }
         public async Task Del(int id)
         {
@@ -34,7 +35,7 @@ namespace CrudOperations.API.Repository
                 {
                     _dbSet.Attach(entity);
                     _dbSet.Remove(entity);
-                    await _dbContext.SaveChangesAsync();
+                    await SaveChangesAsync();
                 }
             }
         }
@@ -43,7 +44,7 @@ namespace CrudOperations.API.Repository
         {
             _dbSet.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            await SaveChangesAsync();
         }
 
         public IList<TEntity> GetAll()
@@ -56,6 +57,10 @@ namespace CrudOperations.API.Repository
         public async Task<TEntity> GetById(int id)
         {
             return  await _dbSet.FindAsync(id);
+        }
+        public async Task SaveChangesAsync()
+        {
+             _dbContext.SaveChangesAsync();
         }
     }
 }

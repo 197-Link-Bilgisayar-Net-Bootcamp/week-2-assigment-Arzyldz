@@ -1,5 +1,6 @@
 ﻿using CrudOperations.API.Models;
 using CrudOperations.API.Repository;
+using CrudOperations.API.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrudOperations.API.Controllers
@@ -10,15 +11,15 @@ namespace CrudOperations.API.Controllers
     {
         #region Fields
 
-        private readonly IRepository<Product> _productRepo;
+        private readonly ICrudService<Product> _productService;
 
         #endregion
 
         #region Constructors
 
-        public ProductController(IRepository<Product> productRepo)
+        public ProductController(ICrudService<Product> productService)
         {
-            _productRepo = productRepo;
+            _productService = productService;
         }
 
         #endregion
@@ -29,35 +30,35 @@ namespace CrudOperations.API.Controllers
         [HttpGet]
         public IEnumerable<Product> Get()
         {
-            return _productRepo.GetAll();
+            return _productService.GetAll();
         }
 
         // GET api/<ProductController>/5
         [HttpGet("{id}")]
         public async Task<Product> Get(int id)
         {
-            return await _productRepo.GetById(id);
+            return await _productService.GetById(id);
         }
 
         // POST api/<ProductController>
         [HttpPost]
         public Task Post([FromBody] Product product)
         {
-            return _productRepo.Add(product);
+            return _productService.Add(product);
         }
 
         // PUT api/<ProductController>
         [HttpPut]
         public Task Put([FromBody] Product product)
         {
-            return  _productRepo.Edit(product);
+            return _productService.Edit(product);
         }
 
         // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
         public Task Delete(int id)
         {
-           return _productRepo.Del(id);
+            return _productService.Del(id);
         }
         #endregion
     }

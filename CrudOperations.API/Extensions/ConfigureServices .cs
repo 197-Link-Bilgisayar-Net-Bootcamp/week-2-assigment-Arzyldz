@@ -1,5 +1,6 @@
 ﻿using CrudOperations.API.Models;
 using CrudOperations.API.Repository;
+using CrudOperations.API.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrudOperations.API.Extensions
@@ -13,8 +14,8 @@ namespace CrudOperations.API.Extensions
                 options.UseSqlServer(confign.GetConnectionString("WebApiDatabase"));
             });
 
-
             services.AddScoped<IRepository<Product>, ProductRepository>();
+            services.AddScoped<ICrudService<Product>, ProductService>();
         }
     }
 }
